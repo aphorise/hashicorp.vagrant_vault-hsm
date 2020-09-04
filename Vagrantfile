@@ -11,8 +11,8 @@ sCA_CERT='cacert.crt'  # // Root CA certificate.
 
 iCLUSTERA_N = 1  # // Vault A INSTANCES UP TO 9 <= iN > 0
 iCLUSTERB_N = 1  # // Vault B INSTANCES UP TO 9 <= iN > 0
-iCLUSTERA_C = 0  # // Consul B INSTANCES UP TO 9 <= iN > 0
-iCLUSTERB_C = 0  # // Consul B INSTANCES UP TO 9 <= iN > 0
+iCLUSTERA_C = 0  # // Consul B INSTANCES UP TO 9 <= iN > 2
+iCLUSTERB_C = 0  # // Consul B INSTANCES UP TO 9 <= iN > 2
 bCLUSTERA_CONSUL = false  # // Consul A use Consul as store for vault?
 bCLUSTERB_CONSUL = false  # // Consul B use Consul as store for vault?
 CLUSTERA_VAULT_NAME = 'hsm1'  # // Vault A Cluster Name

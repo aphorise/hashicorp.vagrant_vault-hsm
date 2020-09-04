@@ -512,8 +512,10 @@ function vaultInitSetup()
 	# // apply license if enterprise & file exists and is not empty or commented.
 	VVERSION=$(vault --version) ;
 	if [[ ${VAULT_NODENAME} == *"1" ]] && [[ ${VVERSION} == *"ent" || ${VVERSION} == *"ent.hsm"* ]] && [[ -s ${LICENSE_FILE} ]] ; then
+		set +e ;
 		# // read the key
 		VAULT_LICENSE=$(grep -v '#' ${LICENSE_FILE}) ;
+		set -e ;
 		if [[ ${VAULT_LICENSE} != "" ]] ; then
 			if [[ ${VAULT_TOKEN} != "" ]] ; then
 				set +e ;
