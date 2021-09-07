@@ -21,7 +21,7 @@ UNAME="$(uname -ar)" ;
 # // OS Version specific apps missing:
 # PKG_UBUNTU='realpath' ; # if [[ ${UNAME} == *"Ubuntu"* ]] ; then sudo apt-get update > /dev/null && sudo apt-get install -yq ${PKG_UBUNTU} > /dev/null ; fi ;
 # // common utils & build tools: make, cpp, etc.
-PKGS="policykit-1 unzip curl htop screen jq build-essential libssh-dev" ;
+PKGS="policykit-1 unzip curl htop screen jq build-essential libssh-dev bc" ;
 PKGS="${PKGS}" ;  # ${PKG_UBUNTU} any-other-packages" ;
 printf "OS INSTALLING: ${PKGS} ...\n" ;
 sudo apt-get update > /dev/null && apt-get install -yq ${PKGS} > /dev/null ;

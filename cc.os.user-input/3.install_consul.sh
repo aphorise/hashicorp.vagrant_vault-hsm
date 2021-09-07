@@ -104,7 +104,7 @@ sERR_DL="REFER TO: ${URL_CONSUL}\n\nERROR: Could not determined download state."
 
 # // DETERMINE LATEST VERSION - where none are provided.
 if [[ ${CONSUL_VERSION} == '' ]] ; then
-	CONSUL_VERSION=$(curl -s ${URL_CONSUL} | grep '<a href="/consul/' | grep -v -E 'beta|rc|ent' | head -n 1 | grep -E -o '([0-9]{1,3}[\.]){2}[0-9]{1,3}' | head -n 1) ;
+	CONSUL_VERSION=$(curl -s ${URL_CONSUL} | grep '<a href="/consul/' | grep -v -E 'alpha|beta|rc|ent' | head -n 1 | grep -E -o '([0-9]{1,3}[\.]){2}[0-9]{1,3}' | head -n 1) ;
 	if [[ ${CONSUL_VERSION} == '' ]] ; then
 		pERR 'ERROR: Could not determine valid / current consul version to download.' ;
 		exit 1 ;
@@ -139,7 +139,7 @@ function donwloadUnpack()
 			exit 1 ;
 		fi ;
 	else
-		PERR "${sERR_DL}" ; exit 1 ;
+		pERR "${sERR_DL}" ; exit 1 ;
 	fi ;
 }
 
