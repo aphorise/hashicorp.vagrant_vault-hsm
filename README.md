@@ -9,6 +9,7 @@ sudo dmesg -p ;  # helpful in showing any hardware / software issue interfacing 
 HSM_LIB='/usr/local/lib/softhsm/libsofthsm2.so' ;  # others: '/opt/safenet/8.3.1/libIngPKCS11.so'
 pkcs11-tool --module ${HSM_LIB} -L ;  # list HSM slots created or available
 pkcs11-tool --module ${HSM_LIB} -l -t ;  # attempt slot use
+pkcs11-tool --module ${HSM_LIB} --list-objects --slot=513163179  --login --pin 1234 ; #// details of objects in slot including Vaylt key & hmac
 ```
 
 :warning: **IMPORTANT**: OS & kernel level updates or changes can impair or negatively impact HSM integrations that were known to be previously working. Be cautious and careful of any level of modification being made. :warning:
