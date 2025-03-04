@@ -6,10 +6,21 @@ Some CLI commands to consider in testing or diagnosing HSM, prior to Vault, may 
 
 ```bash
 sudo dmesg -p ;  # helpful in showing any hardware / software issue interfacing with HSM
-HSM_LIB='/usr/local/lib/softhsm/libsofthsm2.so' ;  # others: '/opt/safenet/8.3.1/libIngPKCS11.so'
-pkcs11-tool --module ${HSM_LIB} -L ;  # list HSM slots created or available
-pkcs11-tool --module ${HSM_LIB} -l -t ;  # attempt slot use
-pkcs11-tool --module ${HSM_LIB} --list-objects --slot=513163179  --login --pin 1234 ; #// details of objects in slot including Vaylt key & hmac
+HSM_LIB='/usr/lib/softhsm/libsofthsm2.so'  # or '/usr/local/lib/softhsm/libsofthsm2.so' ; # or others: '/opt/safenet/8.3.1/libIngPKCS11.so'
+
+sudo pkcs11-tool --module ${HSM_LIB} -L ;  # list HSM slots created or available
+sudo pkcs11-tool --module ${HSM_LIB} -l -t ;  # attempt slot use
+
+SLOT=. ;  # Decimal slot reference from above list or Vault conf if already specified
+
+#// details of objects in slot including Vault key & hmac
+sudo pkcs11-tool --module ${HSM_LIB} --list-objects --slot=${SLOT}  --login --pin 1234 ;
+
+# // generate new key on existing slot with different label
+sudo pkcs11-tool --module ${HSM_LIB} --login --pin 1234 --keygen --key-type AES:32 --label "hsm:v2:vault" --slot=${SLOT} ;
+
+# // check .token and other key files and their properties under
+sudo softhsm2-dump-file /var/lib/softhsm/tokens/feb765b8-de59-d65c-46d5-b4c865ca1847/token.object
 ```
 
 :warning: **IMPORTANT**: OS & kernel level updates or changes can impair or negatively impact HSM integrations that were known to be previously working. Be cautious and careful of any level of modification being made. :warning:
@@ -87,7 +98,9 @@ sudo sed -i "s/slot.*/slot\t\t= \"${HSM_SLOT}\"/g" /etc/vault.d/vault.hcl ;
 sudo sed -i "s/v1:vault/v2:vault/g" /etc/vault.d/vault.hcl ;
 curl -H "X-Vault-Token: ${VAULT_TOKEN}" ${VAULT_ADDR}/v1/sys/sealwrap/rewrap ;
   # ...
-# ^^^ this will break things after restarting as I do not know how key rotations should be done.
+# ^^^ this will break things after restarting.
+# The proper way would be to generate a new key in the same slot that's with a different label
+# that's documented above or using HA seals to achieve the change in HSM seal configuration.
 
 #vagrant@hsm1-vault1:~$ \
 sudo service vault restart ;
